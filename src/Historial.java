@@ -3,30 +3,30 @@ import java.util.List;
 
 
 public class Historial {
-    private List<Consulta> consultas;
+    private List<ConsultaVeterinaria> consultaVeterinarias;
 
     public Historial() {
-        this.consultas = new ArrayList<>();
+        this.consultaVeterinarias = new ArrayList<>();
     }
 
-    public void agregarConsulta(Consulta consulta) {
-        if (consulta != null) {
-            consultas.add(consulta);
+    public void agregarConsulta(ConsultaVeterinaria consultaVeterinaria) {
+        if (consultaVeterinaria != null) {
+            consultaVeterinarias.add(consultaVeterinaria);
         }
     }
 
     public void mostrarConsultas() {
-        if (consultas.isEmpty()) {
-            System.out.println("Sin consultas registradas.");
+        if (consultaVeterinarias.isEmpty()) {
+            System.out.println("Sin consultaVeterinarias registradas.");
         } else {
-            for (Consulta c : consultas) {
+            for (ConsultaVeterinaria c : consultaVeterinarias) {
                 c.mostrarConsulta();
                 System.out.println("--------------------------");
             }
         }
     }
 
-    public List<Consulta> getConsultas() {
-        return new ArrayList<>(consultas);
+    public List<ConsultaVeterinaria> getConsultas() {
+        return new ArrayList<>(consultaVeterinarias);
     }
 }

@@ -83,9 +83,9 @@ public class PanelVacunas extends JInternalFrame {
             LocalDate fechaAplicacion = LocalDate.parse(txtFechaAplicacion.getText());
             LocalDate proximaDosis = LocalDate.parse(txtProximaDosis.getText());
 
-            Vacuna vacuna = new Vacuna(tipo, lote, fechaAplicacion, proximaDosis);
-            crudVacunas.registrarVacuna(mascota, vacuna);
-            JOptionPane.showMessageDialog(this, "✅ Vacuna registrada correctamente.");
+            Vacunacion vacunacion = new Vacunacion(tipo, lote, fechaAplicacion, proximaDosis);
+            crudVacunas.registrarVacuna(mascota, vacunacion);
+            JOptionPane.showMessageDialog(this, "✅ Vacunacion registrada correctamente.");
             listarVacunas();
 
         } catch (Exception ex) {
@@ -98,8 +98,8 @@ public class PanelVacunas extends JInternalFrame {
         String nombreMascota = (String) comboMascotas.getSelectedItem();
         Mascota mascota = crudMascotas.buscarPorNombre(nombreMascota);
         if (mascota != null) {
-            List<Vacuna> vacunas = mascota.getVacunas();
-            for (Vacuna v : vacunas) {
+            List<Vacunacion> vacunacions = mascota.getVacunas();
+            for (Vacunacion v : vacunacions) {
                 modeloTabla.addRow(new Object[]{
                         v.getTipo(),
                         v.getLote(),

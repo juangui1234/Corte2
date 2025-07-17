@@ -1,46 +1,28 @@
 import java.util.ArrayList;
 
-public class Propietario {
-    private String nombre;
-    private String documento;
+public class Propietario extends Persona {
     private String telefono;
     private String direccion;
-    private ArrayList<Mascota> mascotas; // Relación 1:N original
+    private ArrayList<Mascota> mascotas;
 
     public Propietario(String nombre, String documento, String telefono, String direccion) {
-        setNombre(nombre);
-        setDocumento(documento);
+        super(nombre, documento, telefono); // llamada al constructor de Persona
         setTelefono(telefono);
-        setDireccion(direccion);  // nuevo
+        setDireccion(direccion);
         this.mascotas = new ArrayList<>();
     }
-
-        /* codigo original:
-        this.nombre = nombre;
-        this.documento = documento;
-        this.telefono = telefono;
-        this.mascotas = new ArrayList<>();
-        */
-        //setters con validaciones y lista inicializada
-
 
     public void agregarMascota(Mascota mascota) {
         mascotas.add(mascota);
     }
 
-    /*
-     * muestra los datos del propietario.
-     */
     public void mostrarInformacion() {
-        System.out.println("👤 Propietario: " + nombre);
-        System.out.println("🆔 Documento: " + documento);
+        System.out.println("👤 Propietario: " + getNombre());
+        System.out.println("🆔 Documento: " + getDocumento());
         System.out.println("📞 Teléfono: " + telefono);
         System.out.println("🏠 Dirección: " + direccion);
     }
 
-    /*
-     * muestra el historial de todas las mascotas asociadas.
-     */
     public void mostrarMascotas() {
         for (Mascota m : mascotas) {
             System.out.println();
@@ -48,29 +30,32 @@ public class Propietario {
         }
     }
 
-    /*
-     muestra toda la ficha clínica completa.
-     */
-    /*public void mostrarInformacionCompleta() {
+    public void mostrarInformacionCompleta() {
         System.out.println("===== FICHA CLÍNICA =====");
         mostrarInformacion();
         mostrarMascotas();
-    }*/
+    }
 
-    // Getters y Setters refactorizados
-
+    // Getters y Setters
     public ArrayList<Mascota> getMascotas() {
         return mascotas;
     }
-    /*public String getNombre() {
-        return nombre;
-    }*/
-    public void setNombre(String nombre) {
-        if (nombre == null || nombre.isBlank()) {
-            throw new IllegalArgumentException("El nombre no puede estar vacío.");
-        }
-        this.nombre = nombre;
+
+    public String getTelefono() {
+        return telefono;
     }
+
+    public void setTelefono(String telefono) {
+        if (telefono == null || telefono.length() < 7) {
+            throw new IllegalArgumentException("Teléfono inválido.");
+        }
+        this.telefono = telefono;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
     public void setDireccion(String direccion) {
         if (direccion == null || direccion.isBlank()) {
             throw new IllegalArgumentException("Dirección inválida.");
@@ -78,37 +63,8 @@ public class Propietario {
         this.direccion = direccion;
     }
 
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public String getDocumento() {
-        return documento;
-    }
-    public void setDocumento(String documento) {
-        if (documento == null || documento.length() < 5) {
-            throw new IllegalArgumentException("Documento inválido.");
-        }
-        this.documento = documento;
-    }
-    public String getNombre() {
-        return nombre;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-    public void setTelefono(String telefono) {
-        if (telefono == null || telefono.length() < 7) {
-            throw new IllegalArgumentException("Teléfono inválido.");
-        }
-        this.telefono = telefono;
-    }
     @Override
     public String toString() {
-        return nombre + " (" + documento + ")";
+        return getNombre() + " (" + getDocumento() + ")";
     }
-    /*public List<Mascota> getMascotas() {
-        return new ArrayList<>(mascotas);
-    }*/
 }

@@ -1,71 +1,92 @@
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-public class PanelRegistrarConsulta extends JInternalFrame {
+public class PanelRegistrarConsulta extends JPanel {
 
-    private CrudMascotas crudMascotas;
+    private JComboBox<Mascota> comboMascotas;
+    private JComboBox<Veterinario> comboVeterinarios;
+    private JTextField txtDiagnostico;
+    private JTextField txtTratamiento;
+    private JTextField txtMedicamentos;
+    private JTextField txtDescripcion;
+    private JButton btnRegistrar;
 
-    public PanelRegistrarConsulta(CrudMascotas crudMascotas) {
-        super("Registrar Consulta", true, true, true, true);
-        this.crudMascotas = crudMascotas;
+    public PanelRegistrarConsulta(List<Mascota> mascotas, List<Veterinario> veterinarios) {
+        setLayout(new GridLayout(8, 2, 10, 10));
 
-        setSize(450, 300);
-        setLayout(new GridLayout(6, 2, 5, 5));
+        // Componentes
+        comboMascotas = new JComboBox<>();
+        comboVeterinarios = new JComboBox<>();
+        txtDiagnostico = new JTextField();
+        txtTratamiento = new JTextField();
+        txtMedicamentos = new JTextField();
+        txtDescripcion = new JTextField();
+        btnRegistrar = new JButton("Registrar Consulta");
 
-        JLabel lblMascota = new JLabel("Mascota:");
-        JComboBox<Mascota> comboMascotas = new JComboBox<>();
-        for (Mascota m : crudMascotas.getMascotas()) {
-            comboMascotas.addItem(m);  // usa el toString de Mascota
-        }
+        // Llenar combos
+        for (Mascota m : mascotas) comboMascotas.addItem(m);
+        for (Veterinario v : veterinarios) comboVeterinarios.addItem(v);
 
-        JLabel lblVeterinario = new JLabel("Veterinario:");
-        JTextField txtVeterinario = new JTextField();
+        // Agregar componentes al panel
+        add(new JLabel("Mascota:"));
+        add(comboMascotas);
+        add(new JLabel("Veterinario:"));
+        add(comboVeterinarios);
+        add(new JLabel("Diagnóstico:"));
+        add(txtDiagnostico);
+        add(new JLabel("Tratamiento:"));
+        add(txtTratamiento);
+        add(new JLabel("Medicamentos (separados por coma):"));
+        add(txtMedicamentos);
+        add(new JLabel("Descripción:"));
+        add(txtDescripcion);
+        add(new JLabel(""));
+        add(btnRegistrar);
 
-        JLabel lblEspecialidad = new JLabel("Especialidad:");
-        JTextField txtEspecialidad = new JTextField();
+        // Acción del botón
+        btnRegistrar.addActionListener(e -> registrarConsulta());
+    }
 
-        JLabel lblDisponible = new JLabel("¿Disponible?");
-        JCheckBox chkDisponible = new JCheckBox();
-
-        JButton btnRegistrar = new JButton("Registrar Consulta");
-
-        btnRegistrar.addActionListener(_ -> {
+    private void registrarConsulta() {
+        try {
             Mascota mascota = (Mascota) comboMascotas.getSelectedItem();
-            String nombreVet = txtVeterinario.getText().trim();
-            String especialidad = txtEspecialidad.getText().trim();
-            boolean disponible = chkDisponible.isSelected(); // ✅ leer checkbox
+            Veterinario veterinario = (Veterinario) comboVeterinarios.getSelectedItem();
+            String diagnostico = txtDiagnostico.getText().trim();
+            String tratamiento = txtTratamiento.getText().trim();
+            String descripcion = txtDescripcion.getText().trim();
+            String medicamentosTexto = txtMedicamentos.getText().trim();
 
-            if (mascota == null || nombreVet.isEmpty() || especialidad.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+            if (mascota == null || veterinario == null ||
+                    diagnostico.isEmpty() || tratamiento.isEmpty() || medicamentosTexto.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            try {
-                String codigo = IDGenerator.generarCodigoConsulta();
-                LocalDate fecha = LocalDate.now(); // fecha automática
-                Veterinario veterinario = new Veterinario(nombreVet, especialidad, disponible); // ✅ ahora sí
-
-                Consulta consulta = new Consulta(codigo, fecha, veterinario);
-                mascota.agregarConsulta(consulta);
-
-                JOptionPane.showMessageDialog(this, "✅ Consulta registrada con éxito.");
-                dispose();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            List<String> medicamentos = new ArrayList<>();
+            for (String med : medicamentosTexto.split(",")) {
+                medicamentos.add(med.trim());
             }
-        });
 
-        // Agregar componentes
-        add(lblMascota);
-        add(comboMascotas);
-        add(lblVeterinario);
-        add(txtVeterinario);
-        add(lblEspecialidad);
-        add(txtEspecialidad);
-        add(lblDisponible);
-        add(chkDisponible);
-        add(new JLabel()); // espacio vacío
-        add(btnRegistrar);
+            LocalDate fecha = LocalDate.now(); // Fecha actual
+            ConsultaVeterinaria consulta = new ConsultaVeterinaria(
+                    fecha, mascota, descripcion, diagnostico, tratamiento, medicamentos, veterinario
+            );
+
+            mascota.agregarEvento(consulta);
+            JOptionPane.showMessageDialog(this, "Consulta registrada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            // Limpiar campos
+            txtDiagnostico.setText("");
+            txtTratamiento.setText("");
+            txtMedicamentos.setText("");
+            txtDescripcion.setText("");
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al registrar la consulta: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

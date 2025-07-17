@@ -52,7 +52,8 @@ public class ListaPacientes extends JInternalFrame {
     }
 
     private void llenarTabla() {
-        List<Mascota> lista = crudMascotas.getMascotas();
+        List<Mascota> lista = crudMascotas.getListaMascotas(); // ✅ CORREGIDO
+
         for (Mascota m : lista) {
             // Buscar propietario asociado a la mascota
             String propietarioNombre = obtenerPropietarioDeMascota(m);
@@ -63,6 +64,7 @@ public class ListaPacientes extends JInternalFrame {
                     propietarioNombre
             });
         }
+
         barraCarga.setValue(100);
         barraCarga.setString("Datos cargados");
     }

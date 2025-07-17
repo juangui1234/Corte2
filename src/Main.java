@@ -48,7 +48,7 @@ public class Main {
                     int numConsultas = Integer.parseInt(sc.nextLine());
 
                     for (int j = 1; j <= numConsultas; j++) {
-                        System.out.println("-> Consulta #" + j);
+                        System.out.println("-> ConsultaVeterinaria #" + j);
                         String codigo = IDGenerator.generarCodigoConsulta();
                         System.out.print("Fecha (YYYY-MM-DD): ");
                         String fecha = sc.nextLine();
@@ -57,7 +57,7 @@ public class Main {
                         String nombreVet = sc.nextLine();
                         System.out.print("Especialidad: ");
                         String especialidad = sc.nextLine();
-                        Consulta consulta = new Consulta(codigo, fecha, new Veterinario(nombreVet, especialidad));
+                        ConsultaVeterinaria consulta = new ConsultaVeterinaria(codigo, fecha, new Veterinario(nombreVet, especialidad));
                         mascota.agregarConsulta(consulta);
                     }
                 }

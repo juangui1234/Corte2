@@ -2,57 +2,72 @@ import java.util.List;
 
 public class CrudVacunas {
 
-    // Registrar vacuna a una mascota existente
-    public boolean registrarVacuna(Mascota mascota, Vacuna vacuna) {
-        if (mascota != null && vacuna != null) {
-            mascota.agregarVacuna(vacuna);
-            System.out.println("✅ Vacuna registrada para " + mascota.getNombre());
+    // Registrar vacunación a una mascota existente
+    public boolean registrarVacuna(Mascota mascota, Vacunacion vacunacion) {
+        if (mascota != null && vacunacion != null) {
+            mascota.agregarEvento(vacunacion); // ✅ Método correcto
+            System.out.println("✅ Vacunación registrada para " + mascota.getNombre());
             return true;
         }
         return false;
     }
 
-    //listar vacunas de una mascota
+    // Listar vacunas de una mascota
     public void listarVacunas(Mascota mascota) {
         if (mascota != null) {
-            mascota.mostrarVacunas();
+            boolean hayVacunas = false;
+            for (EventoClinico e : mascota.getHistorial()) {
+                if (e instanceof Vacunacion) {
+                    System.out.println(((Vacunacion) e).mostrarDetalle());
+                    hayVacunas = true;
+                }
+            }
+            if (!hayVacunas) {
+                System.out.println("📭 No hay vacunas registradas para " + mascota.getNombre());
+            }
         } else {
             System.out.println("❌ Mascota no encontrada.");
         }
     }
 
     // Buscar vacuna por tipo en una mascota
-    public Vacuna buscarVacunaPorTipo(Mascota mascota, String tipo) {
+    public Vacunacion buscarVacunaPorTipo(Mascota mascota, String tipo) {
         if (mascota != null && tipo != null) {
-            List<Vacuna> vacunas = mascota.getVacunas();
-            for (Vacuna v : vacunas) {
-                if (v.getTipo().equalsIgnoreCase(tipo)) {
-                    return v;
+            for (EventoClinico e : mascota.getHistorial()) {
+                if (e instanceof Vacunacion) {
+                    Vacunacion v = (Vacunacion) e;
+                    if (v.getTipoVacuna().equalsIgnoreCase(tipo)) {
+                        return v;
+                    }
                 }
             }
         }
         return null;
     }
 
-    //eliminar vacuna por tipo
+    // Eliminar vacuna por tipo
     public boolean eliminarVacunaPorTipo(Mascota mascota, String tipo) {
-        Vacuna vacuna = buscarVacunaPorTipo(mascota, tipo);
-        if (vacuna != null) {
-            mascota.getVacunas().remove(vacuna);
-            System.out.println("🗑️ Vacuna '" + tipo + "' eliminada de " + mascota.getNombre());
+        Vacunacion vacunacion = buscarVacunaPorTipo(mascota, tipo);
+        if (vacunacion != null) {
+            mascota.getHistorial().remove(vacunacion);
+            System.out.println("🗑️ Vacunación '" + tipo + "' eliminada de " + mascota.getNombre());
             return true;
         }
         return false;
     }
 
-    //editar vacuna por tipo
-    public boolean editarVacunaPorTipo(Mascota mascota, String tipoOriginal, Vacuna nuevaVacuna) {
-        List<Vacuna> vacunas = mascota.getVacunas();
-        for (int i = 0; i < vacunas.size(); i++) {
-            if (vacunas.get(i).getTipo().equalsIgnoreCase(tipoOriginal)) {
-                vacunas.set(i, nuevaVacuna);
-                System.out.println("✏️ Vacuna actualizada.");
-                return true;
+    // Editar vacuna por tipo
+    public boolean editarVacunaPorTipo(Mascota mascota, String tipoOriginal, Vacunacion nuevaVacunacion) {
+        List<EventoClinico> historial = mascota.getHistorial();
+        for (int i = 0; i < historial.size(); i++) {
+            EventoClinico e = historial.get(i);
+            if (e instanceof Vacunacion) {
+                Vacunacion v = (Vacunacion) e;
+                if (v.getTipoVacuna().equalsIgnoreCase(tipoOriginal)) {
+                    historial.set(i, nuevaVacunacion);
+                    System.out.println("✏️ Vacunación actualizada.");
+                    return true;
+                }
             }
         }
         return false;

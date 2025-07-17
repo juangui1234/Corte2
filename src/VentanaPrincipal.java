@@ -48,16 +48,16 @@ public class VentanaPrincipal extends JFrame {
 
         JMenuItem itemHistorial = new JMenuItem("Historial de consultas");
         itemHistorial.addActionListener(_ -> {
-            PanelHistorialConsultas panel = new PanelHistorialConsultas(crudMascotas);
+            PanelVacunas panel = new PanelVacunas(crudMascotas);
             desktopPane.add(panel);
             panel.setVisible(true);
         });
 
         menuVista.add(itemHistorial);menuVista.add(itemHistorial);
 
-        JMenuItem itemConsulta = new JMenuItem("Consulta");
+        JMenuItem itemConsulta = new JMenuItem("ConsultaVeterinaria");
         itemConsulta.addActionListener(_ -> {
-            PanelConsulta panel = new PanelConsulta(crudMascotas);
+            PanelConsultas panel = new PanelConsultas(crudMascotas);
             desktopPane.add(panel);
             panel.setVisible(true);
         });
@@ -110,9 +110,9 @@ public class VentanaPrincipal extends JFrame {
 
 
         // Registra la consulta
-        JMenuItem itemRegistrarConsulta = new JMenuItem("Registrar Consulta");
+        JMenuItem itemRegistrarConsulta = new JMenuItem("Registrar ConsultaVeterinaria");
         itemRegistrarConsulta.addActionListener(_ -> {
-            PanelRegistrarConsulta panel = new PanelRegistrarConsulta(crudMascotas);
+            PanelRegistrarConsulta panel = new PanelRegistrarConsulta(crudMascotas.getMascotas(), CrudVeterinarios.getVeterinarios());
             desktopPane.add(panel);
             panel.setVisible(true);
         });

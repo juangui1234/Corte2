@@ -1,27 +1,28 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class CrudMascotas {
+    private List<Mascota> mascotas;
 
-    private ArrayList<Mascota> mascotas = new ArrayList<>();
+    public CrudMascotas() {
+        mascotas = new ArrayList<>();
+        // Datos simulados para pruebas
+        mascotas.add(new Mascota("Luna", "Perro", 5));
+        mascotas.add(new Mascota("Milo", "Gato", 3));
+        mascotas.add(new Mascota("Rocky", "Conejo", 2));
+    }
 
-    public ArrayList<Mascota> getMascotas() {
+    // Obtener la lista completa
+    public List<Mascota> getMascotas() {
         return mascotas;
     }
 
-    public void agregarMascota(Mascota mascota) {
-        if (mascota != null) {
-            mascotas.add(mascota);
-        }
+    // Agregar nueva mascota
+    public void agregarMascota(Mascota m) {
+        mascotas.add(m);
     }
 
-    public boolean eliminarMascotaPorNombre(String nombre) {
-        Mascota mascota = buscarPorNombre(nombre);
-        if (mascota != null) {
-            return mascotas.remove(mascota);
-        }
-        return false;
-    }
-
+    // Buscar por nombre
     public Mascota buscarPorNombre(String nombre) {
         for (Mascota m : mascotas) {
             if (m.getNombre().equalsIgnoreCase(nombre)) {
@@ -31,26 +32,13 @@ public class CrudMascotas {
         return null;
     }
 
-    public boolean eliminarPorNombre(String nombre) {
-        Mascota encontrada = buscarPorNombre(nombre);
-        if (encontrada != null) {
-            mascotas.remove(encontrada);
+    // Eliminar mascota por nombre
+    public boolean eliminarMascotaPorNombre(String nombre) {
+        Mascota m = buscarPorNombre(nombre);
+        if (m != null) {
+            mascotas.remove(m);
             return true;
         }
         return false;
-    }
-
-    public boolean editarMascota(String nombreOriginal, Mascota nuevaInfo) {
-        for (int i = 0; i < mascotas.size(); i++) {
-            if (mascotas.get(i).getNombre().equalsIgnoreCase(nombreOriginal)) {
-                mascotas.set(i, nuevaInfo);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void limpiarLista() {
-        mascotas.clear();
     }
 }
